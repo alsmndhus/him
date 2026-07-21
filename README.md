@@ -1,5 +1,9 @@
 # HIM — landing page
 
+![HIM scan demo](him-demo.gif)
+
+**Live page → https://alsmndhus.github.io/him/**
+
 Public landing page for **HIM**, a local-LLM server administrator for Linux.
 
 - Deterministic monitoring that never lies, plus a local LLM that explains *why*.
