@@ -95,6 +95,9 @@
   .tbody .cmd{color:#7fd8a0}.tbody .crit{color:#ff6b6b;font-weight:700}
   .tbody .key{color:#7fb2ff}.tbody .mut{color:#6b7688}.tbody .ok{color:#7fd8a0}
   .cur{display:inline-block;width:8px;height:15px;background:#7fd8a0;vertical-align:-2px;animation:blink 1.1s steps(1) infinite}
+  /* JS 없으면 타이핑 스크롤이 없으므로 터미널이 내용을 전부 보여주게 */
+  html:not(.js) .term{overflow:visible}
+  html:not(.js) .tbody{min-height:0}
   .termcap{text-align:center;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-top:14px}
 
   /* ── sections ── */
@@ -194,7 +197,27 @@
   <div class="wrap" id="how">
     <div class="term rv">
       <div class="tbar"><i class="r"></i><i class="y"></i><i class="g"></i><span>min@server:~ — him scan</span></div>
-      <div class="tbody" id="tbody"></div>
+      <div class="tbody" id="tbody"><span class="cmd">$ him scan</span>
+<span></span>
+<span class="mut"># HIM scan — server — 2026-07-18T17:59:25Z</span>
+<span>- mem: 14201/15274MB avail | load 0.04/8 | swap 391MB</span>
+<span>- disk /: 13% used, 194.2GB free</span>
+<span>- ports: 22, 53, 8443, 8787, 8791, 9443, 11434</span>
+<span>- scan took 99.9s</span>
+<span></span>
+<span class="crit">## [CRIT] systemd unit failed: svmdemo.service</span>
+<span class="key">- root cause (qwen3.5:9b): the service failed because config</span>
+<span>  file /etc/svmdemo/db.conf is missing, preventing port bind.</span>
+<span class="key">- recommended actions (human gate — NOT executed):</span>
+<span>  1. Create the missing config at /etc/svmdemo/db.conf.</span>
+<span>  2. Restart with: systemctl restart svmdemo.service</span>
+<span></span>
+<span class="crit">## [CRIT] 10 failed SSH login attempts in last 10 min</span>
+<span class="key">- root cause (qwen3.5:9b): automated brute-force targeting</span>
+<span class="key">- recommended actions (human gate — NOT executed):</span>
+<span>  1. Block 203.0.113.99 with your firewall (ufw/iptables).</span>
+<span></span>
+<span class="mut">exit 1 · 2 anomalies (2 CRIT) · pushed to your phone</span></div>
     </div>
     <div class="termcap rv">↑ 라이브 서버의 실제 출력. 목업 아님. · Real output from a live server. Nothing mocked.</div>
   </div>
@@ -336,6 +359,7 @@ const LINES=[
   {t:'exit 1 · 2 anomalies (2 CRIT) · pushed to your phone',c:'mut'},
 ];
 function typeTerm(box){
+  box.textContent='';   // 정적 시드 제거 후 타이핑(JS 없으면 시드가 그대로 남는다)
   let li=0; const cur=document.createElement('span'); cur.className='cur';
   function line(){
     if(li>=LINES.length){box.appendChild(cur);return;}
