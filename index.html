@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>HIM — 서버 관리, 그에게 맡기세요 · Hand your servers to HIM</title>
+<script>document.documentElement.className+=" js"</script>
 <style>
   /* ── design system: warm cream paper + indigo ink + serif ── */
   :root{
@@ -34,9 +35,9 @@
   h1,h2,h3{margin:0;line-height:1.18;font-weight:700}
 
   /* reveal on scroll */
-  .rv{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.8,.3,1),transform .7s cubic-bezier(.2,.8,.3,1)}
-  .rv.in{opacity:1;transform:none}
-  .rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}.rv.d4{transition-delay:.32s}
+  .js .rv{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.8,.3,1),transform .7s cubic-bezier(.2,.8,.3,1)}
+  .js .rv.in{opacity:1;transform:none}
+  .js .rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}.rv.d4{transition-delay:.32s}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
   @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
   @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
@@ -63,6 +64,7 @@
     background:var(--amber);opacity:.42;border-radius:2px;transform:scaleX(0);transform-origin:left;
     transition:transform .8s .4s cubic-bezier(.2,.8,.3,1)}
   h1.in .u::after{transform:scaleX(1)}
+  html:not(.js) h1 .u::after{transform:scaleX(1)}
   .heroen{font-size:clamp(19px,2.9vw,26px);color:var(--ink-soft);margin:12px auto 0;letter-spacing:.01em}
   .heroen .himname{color:var(--ink);font-weight:700;letter-spacing:.02em}
   .sub{font-size:clamp(15px,2.3vw,18px);color:var(--text);max-width:646px;margin:26px auto 0;line-height:1.66}
@@ -254,14 +256,14 @@
     <div class="prices">
       <div class="price rv d1">
         <div class="tag">Personal</div>
-        <div class="amt" data-count="19">$0</div>
+        <div class="amt" data-count="19">$19</div>
         <div class="seats">서버 5대까지 · up to 5 servers</div>
         <ul><li>모든 탐지 + 로컬 LLM 진단 · All detection + local-LLM triage</li><li>systemd watch 서비스 · watch service</li><li>푸시 알림 · Push notifications</li><li>영구 라이선스 · Perpetual, all 1.x updates</li></ul>
       </div>
       <div class="price hot rv d2">
         <div class="flag">추천 · popular</div>
         <div class="tag">Team</div>
-        <div class="amt" data-count="49">$0</div>
+        <div class="amt" data-count="49">$49</div>
         <div class="seats">서버 25대까지 · up to 25 servers</div>
         <ul><li>Personal의 모든 것 · Everything in Personal</li><li>플릿 전체 배포 · Whole-fleet deploy</li><li>우선 이메일 지원 · Priority support</li><li>영구 라이선스 · Perpetual, all 1.x updates</li></ul>
       </div>
@@ -304,6 +306,13 @@ function countUp(el){
 new IntersectionObserver((es,o)=>{es.forEach(e=>{if(e.isIntersecting){countUp(e.target);o.unobserve(e.target)}})},{threshold:.6})
   .observe(document.querySelector('.amt'));
 document.querySelectorAll('.amt').forEach(el=>new IntersectionObserver((es,o)=>{es.forEach(e=>{if(e.isIntersecting){countUp(e.target);o.unobserve(e.target)}})},{threshold:.6}).observe(el));
+
+// 안전망 — IO 미발화/차단 환경에서도 콘텐츠가 반드시 보이게(애니는 향상일 뿐)
+setTimeout(()=>{
+  document.querySelectorAll('.rv:not(.in)').forEach(el=>el.classList.add('in'));
+  document.querySelectorAll('h1:not(.in)').forEach(el=>el.classList.add('in'));
+  document.querySelectorAll('.amt').forEach(el=>{ if(!/[1-9]/.test(el.textContent)) el.textContent='$'+el.dataset.count; });
+}, 2500);
 
 // ── live-typing terminal (real scan output) ──
 const LINES=[
